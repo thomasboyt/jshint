@@ -1554,6 +1554,10 @@ var JSHINT = (function () {
 			return val;
 		}
 
+		if (state.inExport && state.tokens.curr.value === "default") {
+		  return val;
+		}
+
 		// Display an info message about reserved words as properties
 		// and ES5 but do it only once.
 		if (prop && !api.getCache("displayed:I002")) {
@@ -3411,8 +3415,10 @@ var JSHINT = (function () {
 					warning("W079", t.token, t.id);
 				}
 				if (t.id && !funct["(nolet)"]) {
-					addlabel(t.id, "unused", t.token, true);
-					names.push(t.token);
+					if (t.id !== "default") {
+						addlabel(t.id, "unused", t.token, true);
+						names.push(t.token);
+					}
 				}
 			}
 			if (prefix) {
@@ -4122,11 +4128,12 @@ var JSHINT = (function () {
 	}).exps = true;
 
 	stmt("export", function () {
+		state.inExport = true;
 		if (!state.option.inESNext()) {
 			warning("W119", state.tokens.curr, "export");
 		}
 
-		if (state.tokens.next.type === "default") {
+		/*if (state.tokens.next.type === "default") {
 			advance("default");
 			if (state.tokens.next.id === "function" || state.tokens.next.id === "class") {
 				this.block = true;
@@ -4134,7 +4141,7 @@ var JSHINT = (function () {
 			this.exportee = expression(10);
 
 			return this;
-		}
+		}*/
 
 		if (state.tokens.next.value === "{") {
 			advance("{");
@@ -4171,9 +4178,13 @@ var JSHINT = (function () {
 			this.block = true;
 			advance("class");
 			state.syntax["class"].fud();
+		} else if (state.tokens.next.identifier === true) {
+			state.syntax["let"].fud.call(state.syntax["let"].fud);
 		} else {
 			error("E024", state.tokens.next, state.tokens.next.value);
 		}
+
+		state.inExport = false;
 
 		return this;
 	}).exps = true;

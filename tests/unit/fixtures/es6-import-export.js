@@ -19,9 +19,9 @@ export default foobar;  // fails
 
 // at some point doing a double export default should error, but for now,
 // makes testing a hell of a lot easier
-export default  = function() {
+export default = function() {
 	return "foobar";
-}
+};
 
 export { foo };
 export { foo, bar };
@@ -40,7 +40,7 @@ export var c = "c";
 
 export class Foo {}
 export class List extends Array {}
-export default class Bar {}
+export default = class Bar {};
 
 export baz = "baz";
 export default = "baz";
