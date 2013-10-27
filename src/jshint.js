@@ -4133,20 +4133,24 @@ var JSHINT = (function () {
 			warning("W119", state.tokens.curr, "export");
 		}
 
-		if (state.tokens.next.value === "{") {
-			advance("{");
-			for (;;) {
-				identifier();
+		if (state.tokens.next.value === "{" || state.tokens.next.value === "*") {
+			if (state.tokens.next.value === "{") {
+				advance("{");
+				for (;;) {
+					identifier();
 
-				if (state.tokens.next.value === ",") {
-					advance(",");
-				} else if (state.tokens.next.value === "}") {
-					advance("}");
-					break;
-				} else {
-					error("E024", state.tokens.next, state.tokens.next.value);
-					break;
+					if (state.tokens.next.value === ",") {
+						advance(",");
+					} else if (state.tokens.next.value === "}") {
+						advance("}");
+						break;
+					} else {
+						error("E024", state.tokens.next, state.tokens.next.value);
+						break;
+					}
 				}
+			} else {
+				advance("*");
 			}
 
 			if (state.tokens.next.value === "from") {
