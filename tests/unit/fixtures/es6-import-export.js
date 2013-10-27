@@ -47,7 +47,7 @@ export default = "baz";
 
 export function default() {}
 
-export class default() {}
+export class default {}
 
 export { foo } from "foo";
 export * from "foo";

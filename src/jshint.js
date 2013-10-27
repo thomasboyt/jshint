@@ -4133,16 +4133,6 @@ var JSHINT = (function () {
 			warning("W119", state.tokens.curr, "export");
 		}
 
-		/*if (state.tokens.next.type === "default") {
-			advance("default");
-			if (state.tokens.next.id === "function" || state.tokens.next.id === "class") {
-				this.block = true;
-			}
-			this.exportee = expression(10);
-
-			return this;
-		}*/
-
 		if (state.tokens.next.value === "{") {
 			advance("{");
 			for (;;) {
@@ -4157,6 +4147,11 @@ var JSHINT = (function () {
 					error("E024", state.tokens.next, state.tokens.next.value);
 					break;
 				}
+			}
+
+			if (state.tokens.next.value === "from") {
+				advance("from");
+				advance("(string)");
 			}
 			return this;
 		}
